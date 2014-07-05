@@ -24,7 +24,7 @@ def get_sentinel_package():
 
 class Part(models.Model):
     number = models.CharField(max_length=256)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     package = models.ForeignKey('Package', related_name='parts', on_delete=models.SET(get_sentinel_package))
     category = models.ForeignKey('Category', related_name='parts', on_delete=models.SET(get_sentinel_category))
     created = models.DateTimeField(auto_now_add=True)
@@ -48,11 +48,11 @@ class Bin(models.Model):
     )  
     
     number = models.CharField(max_length=64)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     quantity = models.CharField(max_length=32, choices=QUANTITY_CHOICES, default=EMPTY)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    part = models.ForeignKey('Part', related_name='bins', on_delete=models.SET(get_sentinel_part))
+    part = models.ForeignKey('Part', related_name='bins', on_delete=models.SET_NULL, null=True)
 
     def __unicode__(self):
         return self.number
