@@ -1,7 +1,7 @@
 from django.db import models
 
 class Category(models.Model):
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -12,7 +12,7 @@ def get_sentinel_category():
     return Category.objects.get_or_create(name='DEFAULT')[0]
 
 class Package(models.Model):
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -23,10 +23,11 @@ def get_sentinel_package():
     return Package.objects.get_or_create(name='DEFAULT')[0]
 
 class Part(models.Model):
-    number = models.CharField(max_length=256)
+    number = models.CharField(max_length=256, unique=True)
     description = models.TextField(blank=True)
     package = models.ForeignKey('Package', related_name='parts', on_delete=models.SET(get_sentinel_package))
     category = models.ForeignKey('Category', related_name='parts', on_delete=models.SET(get_sentinel_category))
+    bins = models.ManyToManyField('Bin', related_name='parts')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -47,12 +48,11 @@ class Bin(models.Model):
             (EMPTY, 'Empty'),
     )  
     
-    number = models.CharField(max_length=64)
+    number = models.CharField(max_length=64, unique=True)
     description = models.TextField(blank=True)
     quantity = models.CharField(max_length=32, choices=QUANTITY_CHOICES, default=EMPTY)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    part = models.ForeignKey('Part', related_name='bins', on_delete=models.SET_NULL, null=True)
 
     def __unicode__(self):
         return self.number
