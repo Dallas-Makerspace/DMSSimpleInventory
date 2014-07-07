@@ -8,6 +8,9 @@ class Category(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
 def get_sentinel_category():
     return Category.objects.get_or_create(name='DEFAULT')[0]
 
@@ -19,11 +22,14 @@ class Package(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
 def get_sentinel_package():
     return Package.objects.get_or_create(name='DEFAULT')[0]
 
 class Part(models.Model):
-    number = models.CharField(max_length=256, unique=True)
+    number = models.CharField(max_length=256)
     description = models.TextField(blank=True)
     package = models.ForeignKey('Package', related_name='parts', on_delete=models.SET(get_sentinel_package))
     category = models.ForeignKey('Category', related_name='parts', on_delete=models.SET(get_sentinel_category))
@@ -33,6 +39,10 @@ class Part(models.Model):
 
     def __unicode__(self):
         return self.number
+
+    class Meta:
+        unique_together = (("number", "package"),)
+        ordering = ['number']
 
 def get_sentinel_part():
     return Part.objects.get_or_create(number='DEFAULT')[0]
@@ -56,3 +66,6 @@ class Bin(models.Model):
 
     def __unicode__(self):
         return self.number
+
+    class Meta:
+        ordering = ['number']
