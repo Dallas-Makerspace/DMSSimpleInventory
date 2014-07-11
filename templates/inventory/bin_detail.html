@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+Parts stored in this bin:
+<ul>
+{% for part in object.parts.all %}
+    <li>{{ part.number }}</li>
+{% endfor %}
+</ul>
+{% endblock %}
