@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
+from django.forms import ModelForm
 
 from inventory.models import Part, Bin
 
@@ -32,9 +33,19 @@ class PartCreate(generic.CreateView):
     model = Part
     fields = ['number', 'package', 'category', 'bins']
 
-def add_inventory(request, bin_id):
-    b = get_object_or_404(Bin, pk=bin_id)
-    p = Part(number=request.POST['number'], package=request.POST['package'], category=request.POST['category'])
-    p.save()
-    b.parts.add(p)
+def add_inventory(request, pk):
+    b = get_object_or_404(Bin, pk=pk)
+    class PartForm(ModelForm):
+        class Meta:
+            model = Part
+            fields = ['number', 'package', 'category']
+    if request.method == 'GET':
+        return render(request, 'inventory/add_part_to_bin.html', {'form': PartForm()}) 
+    elif request.method == 'POST':
+        try:
+            form = PartForm(request.POST)
+            p = form.save()
+            b.parts.add(p)
+        except ValueError:
+            return render(request, 'inventory/add_part_to_bin.html', {'form': form})
 
