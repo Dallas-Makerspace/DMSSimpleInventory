@@ -4,7 +4,7 @@
 Parts stored in this bin:
 <ul>
 {% for part in object.parts.all %}
-    <li>{{ part.number }}</li>
+<li><a href="/parts/{{part.id}}/">{{ part.number }}</a></li>
 {% endfor %}
 </ul>
 <a href="/bins/{{ object.id }}/add">Add part to this bin</a>

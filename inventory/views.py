@@ -22,6 +22,9 @@ class BinListView(generic.ListView):
 class BinDetailView(generic.DetailView):
     model = Bin
 
+class PartDetailView(generic.DetailView):
+    model = Part 
+
 class SearchView(generic.ListView):
     template_name = 'inventory/search.html'
     context_object_name = 'results'
@@ -46,6 +49,7 @@ def add_inventory(request, pk):
             form = PartForm(request.POST)
             p = form.save()
             b.parts.add(p)
+            return render(request, 'inventory/add_part_to_bin.html', {'message': 'Part added.', 'form': PartForm()})
         except ValueError:
             return render(request, 'inventory/add_part_to_bin.html', {'form': form})
 

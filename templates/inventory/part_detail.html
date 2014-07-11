@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<ul>
+    <li>Part number: {{ object.number }}</li>
+    <li>Package: {{ object.package.name }}</li>
+    <li>Category: {{ object.category.name }}</li>
+</ul>
+Bins this part can be found in:
+<ul>
+{% for bin in object.bins.all %}
+<li><a href="/bins/{{bin.id}}/">{{ bin.number }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

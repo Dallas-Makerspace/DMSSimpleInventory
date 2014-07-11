@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^bins/page(?P<page>[0-9]+)/$', views.BinListView.as_view()),
     url(r'^bins/(?P<pk>[0-9]+)/$', views.BinDetailView.as_view()),
     url(r'^bins/(?P<pk>[0-9]+)/add$', views.add_inventory, name='add_inventory'),
+    url(r'^parts/(?P<pk>[0-9]+)/$', views.PartDetailView.as_view()),
     url(r'^add_part/', views.PartCreate.as_view(), name='add_part'),
     
 )
