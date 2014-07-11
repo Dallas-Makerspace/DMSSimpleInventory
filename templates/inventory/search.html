@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method=GET>
+    <input type="text" name="q" id="q"/>
+    <input type="submit" name="Search" value="Search"/>
+</form>
+<ul>
+    {% for part in results %}
+    <li>Part number: <a href="/parts/{{ part.id }}/">{{ part.number }}</a></li>
+        Available in bins: 
+        <ul>
+            {% for bin in part.bins.all %}
+            <li><a href="/bins/{{ bin.id }}/">{{ bin.number }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</ul>
+{% endblock %}

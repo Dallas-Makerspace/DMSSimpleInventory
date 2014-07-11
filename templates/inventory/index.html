@@ -1,3 +1,7 @@
+<form method=GET action="/search/">
+    <input type="text" name="q" id="q"/>
+    <input type="submit" name="Search" value="Search"/>
+</form>
 <ul>
 {% for part in latest_part_list %}
 <li>{{part.number}}</li>
