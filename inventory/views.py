@@ -89,12 +89,12 @@ def import_view(request):
                 package = Package.objects.get_or_create(name=row[5])[0]
                 package.save()
 
-                part = Part.objects.get_or_create(number=row[3], package=package)[0]
-                part.description = row[4]
-                
                 category = Category.objects.get_or_create(name=row[6])[0]
                 category.save()
 
+                part = Part.objects.get_or_create(number=row[3], package=package)[0]
+                part.description = row[4]
+                
                 part.category = category
                 part.save()
 
