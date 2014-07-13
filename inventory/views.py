@@ -1,8 +1,12 @@
+import csv
+import StringIO
+
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
-from django.forms import ModelForm
+from django import forms
+from django.http import HttpResponse, HttpResponseRedirect
 
-from inventory.models import Part, Bin
+from inventory.models import Part, Bin, Package, Category
 
 class IndexView(generic.ListView):
     template_name = 'inventory/index.html'
@@ -38,7 +42,7 @@ class PartCreate(generic.CreateView):
 
 def add_inventory(request, pk):
     b = get_object_or_404(Bin, pk=pk)
-    class PartForm(ModelForm):
+    class PartForm(forms.ModelForm):
         class Meta:
             model = Part
             fields = ['number', 'package', 'category']
@@ -54,6 +58,45 @@ def add_inventory(request, pk):
             return render(request, 'inventory/add_part_to_bin.html', {'form': form})
 
 def search(request):
-    print request.GET['q'] 
     results = Part.objects.filter(number__contains=request.GET['q'])
     return render(request, 'inventory/search.html', {'results': results}) 
+
+def export(request):
+    out_buffer = StringIO.StringIO()
+    writer = csv.writer(out_buffer)
+    for bin_obj in Bin.objects.all():
+        for part in bin_obj.parts.all():
+            writer.writerow([bin_obj.number, bin_obj.description, bin_obj.quantity, part.number, part.description, part.package.name, part.category.name])
+    response = HttpResponse(out_buffer.getvalue(), 'text/csv')
+    response['Content-Disposition'] = 'attachment; filename="export.csv"'
+    return response
+
+def import_view(request):
+    class ImportForm(forms.Form):
+        file = forms.FileField()
+    if request.method == 'GET':
+        return render(request, 'inventory/import.html', {'form': ImportForm()})
+    elif request.method == 'POST':
+        form = ImportForm(request.POST, request.FILES)
+        if form.is_valid():
+            reader = csv.reader(request.FILES['file'])
+            for row in reader:
+                bin_obj = Bin.objects.get_or_create(number=row[0])[0]
+                bin_obj.description = row[1]
+                bin_obj.quantity = row[2]
+                bin_obj.save()
+
+                package = Package.objects.get_or_create(name=row[5])[0]
+                package.save()
+
+                part = Part.objects.get_or_create(number=row[3], package=package)[0]
+                part.description = row[4]
+                
+                category = Category.objects.get_or_create(name=row[6])[0]
+                category.save()
+
+                part.category = category
+                part.save()
+
+                bin_obj.parts.add(part)
+            return HttpResponseRedirect('/import')

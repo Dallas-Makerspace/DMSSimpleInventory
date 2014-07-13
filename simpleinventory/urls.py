@@ -18,6 +18,8 @@ urlpatterns = patterns('',
     url(r'^bins/(?P<pk>[0-9]+)/add$', views.add_inventory, name='add_inventory'),
     url(r'^parts/(?P<pk>[0-9]+)/$', views.PartDetailView.as_view()),
     url(r'^add_part/', views.PartCreate.as_view(), name='add_part'),
-    url(r'^search/$', views.search, name='search')
+    url(r'^search/$', views.search, name='search'),
+    url(r'^export/$', views.export, name='export'),
+    url(r'^import/$', views.import_view, name='import')
     
 )
