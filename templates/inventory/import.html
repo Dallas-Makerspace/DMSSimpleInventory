@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+{{ message }}
+<table>
+    <form method=POST enctype="multipart/form-data">{% csrf_token %}
+        {{ form }}
+        <tr>
+            <th></th>
+            <td><input type=submit name="import" value="Import"/></td>
+        </tr>
+    </form>
+</table>
+{% endblock %}
