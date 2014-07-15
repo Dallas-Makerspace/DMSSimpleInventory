@@ -3,6 +3,9 @@
 {% block content %}
 <ul>
     <li>Part number: {{ object.number }}</li>
+        <ul>
+            <li><a href="http://www.digikey.com/product-search/en?x=0&y=0&lang=en&site=us&KeyWords={{ object.number }}">Search {{ object.number }} on DigiKey</a></li>
+        </ul>
     <li>Package: {{ object.package.name }}</li>
     <li>Category: {{ object.category.name }}</li>
     <li>Description: <p>{{ object.description }}</p></li>

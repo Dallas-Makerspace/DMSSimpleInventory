@@ -54,6 +54,5 @@ def add_inventory(request, pk):
             return render(request, 'inventory/add_part_to_bin.html', {'form': form})
 
 def search(request):
-    print request.GET['q'] 
     results = Part.objects.filter(number__contains=request.GET['q'])
     return render(request, 'inventory/search.html', {'results': results}) 
