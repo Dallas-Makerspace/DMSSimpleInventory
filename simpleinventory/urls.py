@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^add_part/', views.PartCreate.as_view(), name='add_part'),
     url(r'^search/$', views.search, name='search'),
     url(r'^export/$', views.export, name='export'),
-    url(r'^import/$', views.import_view, name='import')
+    url(r'^import/$', views.import_view, name='import'),
+    url(r'^regen/$', views.generate_search_views, name='regen')
     
 )

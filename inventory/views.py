@@ -58,8 +58,13 @@ def add_inventory(request, pk):
             return render(request, 'inventory/add_part_to_bin.html', {'form': form})
 
 def search(request):
-    results = Part.objects.filter(number__contains=request.GET['q'])
+    results = Part.search_manager.search(request.GET['q'])
     return render(request, 'inventory/search.html', {'results': results}) 
+
+def generate_search_views(request):
+    for part in Part.objects.all():
+        part.update_search_field()
+    return HttpResponseRedirect('/regen') 
 
 def export(request):
     out_buffer = StringIO.StringIO()
