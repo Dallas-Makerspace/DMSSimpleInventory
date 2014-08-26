@@ -2,18 +2,32 @@
 
 {% block content %}
 <form method=GET>
-    <input type="text" name="q" id="q"/>
+    <input type="text" name="q" value="{{ query}}" id="q"/>
     <input type="submit" name="Search" value="Search"/>
 </form>
-<ul>
+<table>
+    <tr>
+        <td>Part Number</td>
+        <td>Package</td>
+        <td>Category</td>
+        <td>Description</td>
+        <td>Available in bins</td>
+    </tr>
     {% for part in results %}
-    <li>Part number: <a href="/parts/{{ part.id }}/">{{ part.number }}</a></li>
-        Available in bins: 
-        <ul>
-            {% for bin in part.bins.all %}
-            <li><a href="/bins/{{ bin.id }}/">{{ bin.number }}</a></li>
-            {% endfor %}
-        </ul>
+    <tr>
+        <td><a href="/parts/{{ part.id }}/">{{ part.number }}</a></td>
+        <td>{{ part.package.name }}</td>
+        <td>{{ part.category.name }}</td>
+        <td>{{ part.description }}</td>
+        <td>
+            <ul>
+                {% for bin in part.bins.all %}
+                    <li><a href="/bins/{{ bin.id }}/">{{ bin.number }}</a></li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
     {% endfor %}
+</table>
 </ul>
 {% endblock %}

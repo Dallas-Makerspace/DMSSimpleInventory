@@ -13,7 +13,7 @@ class IndexView(generic.ListView):
     context_object_name = 'latest_part_list'
 
     def get_queryset(self):
-        return Part.objects.order_by('-updated')[:10]
+        return Part.objects.order_by('-updated').filter(status=Part.PRESENT)[:10]
 
 class BinListView(generic.ListView):
     template_name = 'inventory/bin.html'
@@ -57,14 +57,20 @@ def add_inventory(request, pk):
         except ValueError:
             return render(request, 'inventory/add_part_to_bin.html', {'form': form})
 
+def report_empty(request, pk):
+    part = get_object_or_404(Part, pk=pk)
+    part.status = Part.EMPTY
+    part.save()
+    return render(request, 'inventory/report_empty.html', {'part': part})
+
 def search(request):
-    results = Part.search_manager.search(request.GET['q'])
-    return render(request, 'inventory/search.html', {'results': results}) 
+    results = Part.search_manager.search(request.GET['q']).filter(status=Part.PRESENT)
+    return render(request, 'inventory/search.html', {'results': results, 'query': request.GET['q']}) 
 
 def generate_search_views(request):
     for part in Part.objects.all():
         part.update_search_field()
-    return HttpResponseRedirect('/regen') 
+    return HttpResponseRedirect('/') 
 
 def export(request):
     out_buffer = StringIO.StringIO()

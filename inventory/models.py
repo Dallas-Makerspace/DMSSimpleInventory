@@ -31,11 +31,22 @@ def get_sentinel_package():
     return Package.objects.get_or_create(name='DEFAULT')[0]
 
 class Part(models.Model):
+    PRESENT = 'present'
+    EMPTY = 'empty'
+    INCORRECT = 'incorrect'
+
+    STATUS_CHOICES = (
+            (PRESENT, 'Present'),
+            (EMPTY, 'Reported as empty'),
+            (INCORRECT, 'Reported as incorrect'),
+    )
+
     number = models.CharField(max_length=256)
     description = models.TextField(blank=True)
     package = models.ForeignKey('Package', related_name='parts')
     category = models.ForeignKey('Category', related_name='parts')
     bins = models.ManyToManyField('Bin', related_name='parts')
+    status = models.CharField(max_length=32, choices=STATUS_CHOICES, default=PRESENT)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     search_index = VectorField()
@@ -57,19 +68,8 @@ def get_sentinel_part():
     return Part.objects.get_or_create(number='DEFAULT')[0]
 
 class Bin(models.Model):
-    FULL = 'full'
-    HALF_FULL = 'half'
-    EMPTY = 'empty'
-                
-    QUANTITY_CHOICES = (
-            (FULL, 'Full'),
-            (HALF_FULL, 'Half full'),
-            (EMPTY, 'Empty'),
-    )  
-    
     number = models.CharField(max_length=64, unique=True)
     description = models.TextField(blank=True)
-    quantity = models.CharField(max_length=32, choices=QUANTITY_CHOICES, default=EMPTY)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
