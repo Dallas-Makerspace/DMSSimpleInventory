@@ -1,20 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<ul>
-    <li>Part number: {{ object.number }}</li>
-        <ul>
-            <li><a href="http://www.digikey.com/product-search/en?x=0&y=0&lang=en&site=us&KeyWords={{ object.number }}">Search {{ object.number }} on DigiKey</a></li>
-        </ul>
-    <li>Package: {{ object.package.name }}</li>
-    <li>Category: {{ object.category.name }}</li>
-    <li>Description: <p>{{ object.description }}</p></li>
-    <li>Status: {{object.status}}</li>
-</ul>
-Bins this part can be found in:
-<ul>
-{% for bin in object.bins.all %}
-<li><a href="/bins/{{bin.id}}/">{{ bin.number }}</a></li>
-{% endfor %}
-</ul>
+<div class="panel panel-default">
+    <div class="panel-heading">Part Details</div>
+        <div class="panel-body">
+            <ul>
+                <li>Part number: {{ object.number }}</li>
+                    <ul>
+                        <li><a href="http://www.digikey.com/product-search/en?x=0&y=0&lang=en&site=us&KeyWords={{ object.number }}">Search {{ object.number }} on DigiKey</a></li>
+                    </ul>
+                <li>Package: {{ object.package.name }}</li>
+                <li>Category: {{ object.category.name }}</li>
+                <li>Description: <p>{{ object.description }}</p></li>
+                <li>Status: {{object.status}}</li>
+            </ul>
+            Bins this part can be found in:
+            <ul>
+            {% for bin in object.bins.all %}
+            <li><a href="/bins/{{bin.id}}/">{{ bin.number }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    <div>
+</div>
 {% endblock %}

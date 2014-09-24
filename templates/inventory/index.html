@@ -1,11 +1,31 @@
-<form method=GET action="/search/">
-    <input type="text" name="q" id="q"/>
-    <input type="submit" name="Search" value="Search"/>
-</form>
-<ul>
-{% for part in latest_part_list %}
-<li>{{part.number}}</li>
-{% empty %}
-<li>No parts found!</li>
-{% endfor %}
-</ul>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading">Newest Parts</div>
+    <table class="table table-striped">
+        <tr>
+            <th>Part Number</th>
+            <th>Package</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Available in bins</th>
+        </tr>
+        {% for part in latest_part_list %}
+        <tr>
+            <td><a href="/parts/{{ part.id }}/">{{ part.number }}</a></td>
+            <td>{{ part.package.name }}</td>
+            <td>{{ part.category.name }}</td>
+            <td>{{ part.description }}</td>
+            <td>
+                <ul>
+                    {% for bin in part.bins.all %}
+                        <li><a href="/bins/{{ bin.id }}/">{{ bin.number }}</a></li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

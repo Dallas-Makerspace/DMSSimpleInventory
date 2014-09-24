@@ -1,17 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form method=GET>
-    <input type="text" name="q" value="{{ query}}" id="q"/>
-    <input type="submit" name="Search" value="Search"/>
-</form>
-<table>
+<table class="table table-striped">
     <tr>
-        <td>Part Number</td>
-        <td>Package</td>
-        <td>Category</td>
-        <td>Description</td>
-        <td>Available in bins</td>
+        <th>Part Number</th>
+        <th>Package</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Available in bins</th>
     </tr>
     {% for part in results %}
     <tr>
@@ -29,5 +25,4 @@
     </tr>
     {% endfor %}
 </table>
-</ul>
 {% endblock %}

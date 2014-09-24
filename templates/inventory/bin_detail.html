@@ -1,11 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-Parts stored in this bin:
-<ul>
-{% for part in object.parts.all %}
-<li><a href="/parts/{{part.id}}/">{{ part.number }}</a></li>
-{% endfor %}
-</ul>
+<div class="panel panel-default">
+    <div class="panel-heading">Parts stored in bin {{ object.number }}</div>
+    <table class="table table-striped">
+        <tr>
+            <th>Part Number</th>
+            <th>Package</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Available in bins</th>
+        </tr>
+        {% for part in object.parts.all %}
+        <tr>
+            <td><a href="/parts/{{ part.id }}/">{{ part.number }}</a></td>
+            <td>{{ part.package.name }}</td>
+            <td>{{ part.category.name }}</td>
+            <td>{{ part.description }}</td>
+            <td>
+                <ul>
+                    {% for bin in part.bins.all %}
+                        <li><a href="/bins/{{ bin.id }}/">{{ bin.number }}</a></li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
 <a href="/bins/{{ object.id }}/add">Add part to this bin</a>
 {% endblock %}

@@ -10,14 +10,14 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = '/home/carpman/Projects/DMSSimpleInventory' 
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '$i%o4z4#o*vxej=c50u960^=)n9tusir8jb09(za_==%q50^gp'
+SECRET_KEY = '0zK9Gd1lzE9N4MH2m6gy/MbR18rCduml7tiGJAo4hc3I1LBz31m8L1L0Vsiy00Pd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'inventory',
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,8 +59,12 @@ WSGI_APPLICATION = 'simpleinventory.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'simpleinv',
+	'USER': 'simpleinv',
+	'PASSWORD': 'aapmcm10',
+	'HOST':	'192.168.56.101',
+	'PORT': '5432',
     }
 }
 
@@ -81,6 +86,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+)
 
 TEMPLATE_DIRS = (
         os.path.join(BASE_DIR, 'templates')
